@@ -12,7 +12,6 @@ from neo4j import GraphDatabase
 import openai
 import logging
 from sentence_transformers import SentenceTransformer
-import time
 
 load_dotenv()
 
@@ -32,23 +31,7 @@ app.add_middleware(
 )
 
 # Milvus connection
-def connect_to_milvus():
-    max_retries = 5
-    retry_interval = 5  # seconds
-
-    for i in range(max_retries):
-        try:
-            connections.connect("default", host=os.getenv("MILVUS_HOST"), port=os.getenv("MILVUS_PORT"))
-            logger.info("Successfully connected to Milvus")
-            return
-        except Exception as e:
-            logger.warning(f"Failed to connect to Milvus (attempt {i+1}/{max_retries}): {e}")
-            if i < max_retries - 1:
-                logger.info(f"Retrying in {retry_interval} seconds...")
-                time.sleep(retry_interval)
-            else:
-                logger.error("Max retries reached. Unable to connect to Milvus.")
-                raise
+connections.connect("default", host=os.getenv("MILVUS_HOST"), port=os.getenv("MILVUS_PORT"))
 
 # Neo4j connection
 neo4j_driver = GraphDatabase.driver(
@@ -259,7 +242,6 @@ async def health_check():
 
 @app.on_event("startup")
 async def startup_event():
-    connect_to_milvus()
     create_milvus_collection()
 
 if __name__ == "__main__":
