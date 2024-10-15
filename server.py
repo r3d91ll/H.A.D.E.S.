@@ -31,7 +31,22 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-# Milvus connection
+# LM Studio configuration
+openai.api_base = os.getenv("LLM_API_BASE_URL", "http://192.168.1.69:1234/v1")
+openai.api_key = os.getenv("LLM_API_KEY", "not-needed")
+
+# Neo4j connection
+neo4j_driver = GraphDatabase.driver(
+    os.getenv("NEO4J_URI"),
+    auth=(os.getenv("NEO4J_USER"), os.getenv("NEO4J_PASSWORD"))
+)
+
+# Load the sentence transformer model
+model = SentenceTransformer('all-MiniLM-L6-v2')
+
+class Query(BaseModel):
+    query: str
+
 def connect_to_milvus():
     max_retries = 5
     retry_interval = 5  # seconds
@@ -49,22 +64,6 @@ def connect_to_milvus():
             else:
                 logger.error("Max retries reached. Unable to connect to Milvus.")
                 raise
-
-# Neo4j connection
-neo4j_driver = GraphDatabase.driver(
-    os.getenv("NEO4J_URI"),
-    auth=(os.getenv("NEO4J_USER"), os.getenv("NEO4J_PASSWORD"))
-)
-
-# OpenAI configuration
-openai.api_base = os.getenv("LLM_API_BASE_URL")
-openai.api_key = os.getenv("LLM_API_KEY")
-
-# Load the sentence transformer model
-model = SentenceTransformer('all-MiniLM-L6-v2')
-
-class Query(BaseModel):
-    query: str
 
 def check_milvus_health():
     try:
