@@ -1,11 +1,27 @@
-version: '3.8'
-
 services:
   frontend:
-    # ... (keep existing frontend configuration)
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./src:/app/src
+    environment:
+      - VITE_API_URL=http://backend:8000
 
   backend:
-    # ... (keep existing backend configuration)
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "8000:8000"
+    environment:
+      - NEO4J_USER=${NEO4J_USER:-neo4j}
+      - NEO4J_PASSWORD=${NEO4J_PASSWORD:-password}
+    depends_on:
+      - milvus
+      - neo4j
 
   milvus:
     image: milvusdb/milvus:v2.2.11
@@ -48,7 +64,14 @@ services:
       retries: 3
 
   neo4j:
-    # ... (keep existing neo4j configuration)
+    image: neo4j:4.4
+    environment:
+      - NEO4J_AUTH=${NEO4J_USER:-neo4j}/${NEO4J_PASSWORD:-password}
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - neo4j_data:/data
 
 volumes:
   milvus_data:
