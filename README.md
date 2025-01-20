@@ -6,6 +6,8 @@
 
 </div>
 
+***NOTE THIS BRANCH OF THE REPO IS JUST FOR THOSE WHO WANT TO HAVE A ARANGO DB SERVER AND MCP SERVER RUNNING LOCALLY. nO FURTHER WORK OR DEVELOPMENT WILL BE DONE ON THIS BRANCH!!***
+
 **HADES (Heuristic Adaptive Data Extraction System)** is a lightweight foundation for a multi-modal RAG (Retrieval-Augmented Generation) solution, designed to be stable and efficient for small office and home lab environments. This project focuses on integrating:
 
 - **ArangoDB**: For document storage and vector similarity search using FAISS.
