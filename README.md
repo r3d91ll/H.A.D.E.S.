@@ -1,56 +1,33 @@
-# HADES MCP Server
+# Welcome to HADES - Heuristic Adaptive Data Extraction System
 
-This repository contains a **Model Context Protocol (MCP) Server** (nicknamed “HADES”) that integrates:
+## An ArnagoDB server with Model Context Protocol built in
+
+The **HADES MCP Server** integrates:
 
 - **ArangoDB** for document storage
-- **Milvus** for vector storage
-- **Pydantic** for configuration and validation
-- **Asyncio** and concurrency patterns to serve multiple clients
+- A **TypeScript-based Model Context Protocol (MCP) server** for seamless ArangoDB integration.
 
-The server handles **search, query execution, and other operations** via a custom “tool” interface, enabling easy extension of capabilities.
+This server handles **search, query execution, and other operations** via custom tools, making it extensible for various workflows, including LLM-based RAG systems.
 
-## 1. Environment Setup
+---
 
-Below is how you can create a fresh **Conda** environment for **Python 3.12** and install the necessary Python packages.
+## Features
 
-1. **Create and activate** a new Conda environment:
+### TypeScript-based MCP Server
 
-   ```bash
-   conda create -n hades python=3.12 -y
-   conda activate hades
-   ```
+Provides database interaction capabilities through ArangoDB, including:
 
-2. **Upgrade build tools** (helps avoid build issues on new Python versions):
+- `arango_query`: Execute AQL queries with optional bind variables.
+- `arango_insert`: Insert documents into collections.
+- `arango_update`: Update existing documents by key.
+- `arango_remove`: Remove documents from collections.
+- `arango_backup`: Backup collections to JSON files.
+- `arango_list_collections`: List all collections in the database.
+- `arango_create_collection`: Create a new collection.
 
-   ```bash
-   pip install --upgrade pip setuptools wheel
-   ```
+---
 
-3. **Install project requirements**:
-
-   ```bash
-   # Inside your hades environment
-   pip install -r requirements.txt
-   ```
-
-Your `requirements.txt` might look like:
-
-```text
-pydantic
-pydantic-settings
-arango
-pymilvus
-mcp
-```
-
-> **Note:**  
->
-> - The `mcp` package may be your internal or private library. Ensure you have access to it if it’s not on PyPI.  
-> - If `grpcio` or other native extensions fail to compile on Python 3.12, you may need to install them via conda-forge or use a specific version.
-
-## 2. Sample Docker Setup (ArangoDB & Milvus)
-
-Below is a minimal **Docker Compose** snippet to spin up **ArangoDB** and **Milvus** for local testing. It uses default ports and sets example passwords. **Do not** use these in production.
+## Sample Docker Setup (ArangoDB)
 
 ```yaml
 version: "3.8"
@@ -62,235 +39,101 @@ services:
       - "8529:8529"
     environment:
       - ARANGO_ROOT_PASSWORD=p@$$W0rd
-
-  milvus:
-    image: milvusdb/milvus:2.3.0
-    container_name: milvus
-    ports:
-      - "19530:19530"
-    environment:
-      - MILVUS_USER=root
-      - MILVUS_PASSWORD=p@$$W0rd
 ```
 
-**Steps**:
-
-1. Save the file above as `docker-compose.yml`.  
-2. Run `docker-compose up -d`.  
-3. ArangoDB will be available at `http://localhost:8529` (user: `root`, pass: `p@$$W0rd`).  
-4. Milvus will be listening on `localhost:19530` (user: `root`, pass: `p@$$W0rd`).  
-
-You can now connect your MCP server to these services by configuring environment variables (e.g., `ARANGO_URL`, `ARANGO_USER`, `ARANGO_PASSWORD`, `MILVUS_HOST`, `MILVUS_PORT`, etc.).
-
-## 3. Integrating with Your RAG Solution
-
-This MCP server **assumes** you already have a retrieval-augmented generation pipeline or an LLM-based application that needs:
-
-- Document queries from **ArangoDB**  
-- Vector similarity searches from **Milvus**  
-
-You can wire these services together by:
-
-1. **Setting environment variables** that point to your local or remote ArangoDB and Milvus instances.
-2. **Starting the MCP server** (e.g., `python HADES-MCP-Server.py`) or however your main entry script is named.  
-3. **Sending requests** from your RAG system to the MCP server’s endpoints or via stdio protocol (depending on how your tool calls are orchestrated).
-
-## 4. Usage
-
-Once your databases are up and this server is installed:
-
-1. **Run the MCP server**:
-
-   ```bash
-   python HADES-MCP-Server.py
-   ```
-
-   or whichever file provides the MCP server entry point.
-
-2. **Check logs** to see if the server connected successfully to ArangoDB and Milvus. By **default**, logs are sent to **stdout**. You’ll see output like:
-
-   ```text
-   2024-01-02 12:34:56 - VectorDBMCPServer - INFO - <module>:123 - Vector DB MCP Server running
-   2024-01-02 12:34:56 - VectorDBMCPServer - INFO - <module>:124 - Connected to ArangoDB: _system
-   2024-01-02 12:34:56 - VectorDBMCPServer - INFO - <module>:125 - Connected to Milvus: localhost:19530
-   ```
-
-   If you want to **redirect logs** to a file instead of stdout, modify the `logging.basicConfig(...)` call in your script to specify a `filename=...` parameter.
-
-3. **Send requests** from your RAG solution or any other client. For example:
-   - A tool call to `execute_query` for running an AQL query  
-   - A tool call to `hybrid_search` for vector+doc retrieval  
-
-## 5. Troubleshooting
-
-- If **grpcio** fails to install for Python 3.12, try:
-  - `pip install --upgrade pip setuptools wheel`  
-  - `pip install grpcio==<some-version>` that provides wheels for 3.12  
-  - Or `conda install grpcio -c conda-forge`
-
-- Check **Docker logs**:
-
-  ```bash
-  docker logs arangodb
-  docker logs milvus
-  ```
-
-  to see if either service failed to start.
-
-- Make sure **credentials** in your environment match those in the `docker-compose.yml`.
-
-## 6. License & Support
-
-This code is offered **as is**, with no explicit license or warranty implied. Please reach out to the repository owner or your internal support channels for assistance.
+1. Save the above as `docker-compose.yml`.
+2. Run `docker-compose up -d`.
+3. Access ArangoDB at `http://localhost:8529` (user: `root`, pass: `p@$$W0rd`).
 
 ---
 
-*Enjoy building your RAG workflows with the HADES MCP Server!*
-# HADES MCP Server
+## Configuration for TypeScript MCP Server
 
-This repository contains a **Model Context Protocol (MCP) Server** (nicknamed “HADES”) that integrates:
+Update the server configuration for tools like Claude or Cline:
 
-- **ArangoDB** for document storage
-- **Milvus** for vector storage
-- **Pydantic** for configuration and validation
-- **Asyncio** and concurrency patterns to serve multiple clients
-
-The server handles **search, query execution, and other operations** via a custom “tool” interface, enabling easy extension of capabilities.
-
-## 1. Environment Setup
-
-Below is how you can create a fresh **Conda** environment for **Python 3.12** and install the necessary Python packages.
-
-1. **Create and activate** a new Conda environment:
-
-   ```bash
-   conda create -n hades python=3.12 -y
-   conda activate hades
-   ```
-
-2. **Upgrade build tools** (helps avoid build issues on new Python versions):
-
-   ```bash
-   pip install --upgrade pip setuptools wheel
-   ```
-
-3. **Install project requirements**:
-
-   ```bash
-   # Inside your hades environment
-   pip install -r requirements.txt
-   ```
-
-Your `requirements.txt` might look like:
-
-```text
-pydantic
-pydantic-settings
-arango
-pymilvus
-mcp
+```json
+{
+  "mcpServers": {
+    "arango": {
+      "command": "node",
+      "args": ["/path/to/arango-server/build/index.js"],
+      "env": {
+        "ARANGO_URL": "http://localhost:8529",
+        "ARANGO_DATABASE": "my_database",
+        "ARANGO_USERNAME": "root",
+        "ARANGO_PASSWORD": "p@$$W0rd"
+      }
+    }
+  }
+}
 ```
 
-> **Note:**  
->
-> - The `mcp` package may be your internal or private library. Ensure you have access to it if it’s not on PyPI.  
-> - If `grpcio` or other native extensions fail to compile on Python 3.12, you may need to install them via conda-forge or use a specific version.
+### Environment Variables
 
-## 2. Sample Docker Setup (ArangoDB & Milvus)
-
-Below is a minimal **Docker Compose** snippet to spin up **ArangoDB** and **Milvus** for local testing. It uses default ports and sets example passwords. **Do not** use these in production.
-
-```yaml
-version: "3.8"
-services:
-  arangodb:
-    image: arangodb:3.10
-    container_name: arangodb
-    ports:
-      - "8529:8529"
-    environment:
-      - ARANGO_ROOT_PASSWORD=p@$$W0rd
-
-  milvus:
-    image: milvusdb/milvus:2.3.0
-    container_name: milvus
-    ports:
-      - "19530:19530"
-    environment:
-      - MILVUS_USER=root
-      - MILVUS_PASSWORD=p@$$W0rd
-```
-
-**Steps**:
-
-1. Save the file above as `docker-compose.yml`.  
-2. Run `docker-compose up -d`.  
-3. ArangoDB will be available at `http://localhost:8529` (user: `root`, pass: `p@$$W0rd`).  
-4. Milvus will be listening on `localhost:19530` (user: `root`, pass: `p@$$W0rd`).  
-
-You can now connect your MCP server to these services by configuring environment variables (e.g., `ARANGO_URL`, `ARANGO_USER`, `ARANGO_PASSWORD`, `MILVUS_HOST`, `MILVUS_PORT`, etc.).
-
-## 3. Integrating with Your RAG Solution
-
-This MCP server **assumes** you already have a retrieval-augmented generation pipeline or an LLM-based application that needs:
-
-- Document queries from **ArangoDB**  
-- Vector similarity searches from **Milvus**  
-
-You can wire these services together by:
-
-1. **Setting environment variables** that point to your local or remote ArangoDB and Milvus instances.
-2. **Starting the MCP server** (e.g., `python HADES-MCP-Server.py`) or however your main entry script is named.  
-3. **Sending requests** from your RAG system to the MCP server’s endpoints or via stdio protocol (depending on how your tool calls are orchestrated).
-
-## 4. Usage
-
-Once your databases are up and this server is installed:
-
-1. **Run the MCP server**:
-
-   ```bash
-   python HADES-MCP-Server.py
-   ```
-
-   or whichever file provides the MCP server entry point.
-
-2. **Check logs** to see if the server connected successfully to ArangoDB and Milvus. By **default**, logs are sent to **stdout**. You’ll see output like:
-
-   ```text
-   2024-01-02 12:34:56 - VectorDBMCPServer - INFO - <module>:123 - Vector DB MCP Server running
-   2024-01-02 12:34:56 - VectorDBMCPServer - INFO - <module>:124 - Connected to ArangoDB: _system
-   2024-01-02 12:34:56 - VectorDBMCPServer - INFO - <module>:125 - Connected to Milvus: localhost:19530
-   ```
-
-   If you want to **redirect logs** to a file instead of stdout, modify the `logging.basicConfig(...)` call in your script to specify a `filename=...` parameter.
-
-3. **Send requests** from your RAG solution or any other client. For example:
-   - A tool call to `execute_query` for running an AQL query  
-   - A tool call to `hybrid_search` for vector+doc retrieval  
-
-## 5. Troubleshooting
-
-- If **grpcio** fails to install for Python 3.12, try:
-  - `pip install --upgrade pip setuptools wheel`  
-  - `pip install grpcio==<some-version>` that provides wheels for 3.12  
-  - Or `conda install grpcio -c conda-forge`
-
-- Check **Docker logs**:
-
-  ```bash
-  docker logs arangodb
-  docker logs milvus
-  ```
-
-  to see if either service failed to start.
-
-- Make sure **credentials** in your environment match those in the `docker-compose.yml`.
-
-## 6. License & Support
-
-This code is offered **as is**, with no explicit license or warranty implied. Please reach out to the repository owner or your internal support channels for assistance.
+- `ARANGO_URL`: ArangoDB server URL (default port is `8529`).
+- `ARANGO_DATABASE`: Database name.
+- `ARANGO_USERNAME`: Database user.
+- `ARANGO_PASSWORD`: Database password.
 
 ---
+
+## Cline Integration
+
+The MCP server can be integrated with the **Cline VSCode Extension** to simplify debugging and interaction:
+
+1. **Install the MCP server into Cline**:
+
+   ```bash
+   cline add ./build/index.js
+   ```
+
+   This command registers the MCP server from the current working directory.
+
+2. **Verify Installation**:
+   After adding the server, check Cline’s configuration file:
+   - MacOS: `~/Library/Application Support/Code/User/globalStorage/cline.cline/config.json`
+   - Windows: `%APPDATA%/Code/User/globalStorage/cline.cline/config.json`
+
+   Ensure the configuration includes:
+
+   ```json
+   {
+     "command": "node",
+     "args": ["./build/index.js"],
+     "env": {
+       "ARANGO_URL": "http://localhost:8529",
+       "ARANGO_DATABASE": "my_database",
+       "ARANGO_USERNAME": "root",
+       "ARANGO_PASSWORD": "p@$$W0rd"
+     }
+   }
+   ```
+
+3. **Usage in Cline**:
+   - Open Cline in VSCode.
+   - Issue commands like "List all collections in the database" or "Insert a document into users collection."
+   - The MCP server will handle these operations seamlessly.
+
+---
+
+## Debugging
+
+For stdio-based MCP communication:
+
+- Use [MCP Inspector](https://github.com/modelcontextprotocol/inspector):
+
+  ```bash
+  npm run inspector
+  ```
+
+---
+
+## Acknowledgments
+
+We extend our gratitude to the team behind the original [ArangoDB MCP Server](https://github.com/ravenwits/mcp-server-arangodb). Their work has been invaluable in providing the foundation for integrating MCP functionality with ArangoDB. This project builds upon their efforts to deliver enhanced RAG capabilities.
+
+## License & Support
+
+This project is licensed under the MIT License. For issues, please consult your internal support or the repository maintainers.
 
 *Enjoy building your RAG workflows with the HADES MCP Server!*

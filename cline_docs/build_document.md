@@ -10,51 +10,35 @@ Develop a system that embeds data into ArangoDB as document, vector, and graph r
 
 ### 1.1 **Environment Setup**
 
-1. **Persistent Volume Creation**:
-
+1. **Add the ArangoDB Repository**:
    ```bash
-   docker volume create arangodb_data
+   wget -q https://download.arangodb.com/arangodb42/DEBIAN/Release.key -O- | sudo apt-key add -
+   echo 'deb https://download.arangodb.com/arangodb42/DEBIAN/ /' | sudo tee /etc/apt/sources.list.d/arangodb.list
    ```
 
-2. **ArangoDB Container Setup**:
-   Create a `docker-compose.yml` file to simplify container management:
-
-   ```yaml
-   version: '3.8'
-   services:
-     arangodb:
-       image: arangodb/arangodb:latest
-       container_name: arangodb
-       ports:
-         - "8529:8529"
-       environment:
-         - ARANGO_ROOT_PASSWORD=your_password
-       volumes:
-         - arangodb_data:/var/lib/arangodb3
-   volumes:
-     arangodb_data:
-   ```
-
-3. **Run the ArangoDB Container**:
-
+2. **Update the Package List**:
    ```bash
-   docker-compose up -d
+   sudo apt-get update
    ```
 
-4. **Verify Setup**:
-   - Access the ArangoDB Web UI by navigating to `http://localhost:8529` in your browser.
-   - Log in with the `root` username and the password defined in the environment variable.
+3. **Install ArangoDB**:
+   ```bash
+   sudo apt-get install -y arangodb3
+   ```
 
-### 1.2 **Data Organization**
+4. **Configure ArangoDB**:
+   - During installation, you will be prompted to set a root password for ArangoDB. Choose a secure password.
+   - By default, ArangoDB listens on port `8529`. Ensure this port is not blocked by a firewall.
 
-- **Collections**: Design collections for hierarchical data organization:
-  - `Classes`
-  - `Functions`
-  - `Imports`
+5. **Start the ArangoDB Service**:
+   ```bash
+   sudo systemctl start arangodb3
+   sudo systemctl enable arangodb3
+   ```
 
-- **Graph Schemas**: Create schemas for relationships between entities:
-  - Vertex collections (e.g., `Nodes` for entities like classes and functions).
-  - Edge collections (e.g., `Links` for dependencies or interactions).
+6. **Verify the Installation**:
+   - Open a browser and navigate to `http://localhost:8529`.
+   - Log in with the username `root` and the password you set during installation.
 
 ---
 
