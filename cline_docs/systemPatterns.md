@@ -1,0 +1,5 @@
+# System Patterns
+
+- **System Build**: The system is built using a RAG (Retrieval-Augmented Generation) database setup. It uses ArangoDB for document storage, Milvus for vector storage, Pydantic for configuration and validation, and asyncio for concurrency. The plan includes setting up ArangoDB in a Docker container, connecting it to an Ollama instance, and developing a data ingestion and embedding pipeline.
+- **Key Technical Decisions**: The project uses a microservices architecture to separate concerns and improve scalability. The system is designed to run on Linux systems and requires Docker for setting up ArangoDB and Milvus.
+- **Architecture Patterns**: The system follows a client-server architecture where the server handles database operations and the client interacts with the server via a custom "tool" interface. The server is responsible for data ingestion, embedding, and retrieval, while the client can be a command-line interface, a web application, or any other application that can communicate with the server via the MCP protocol.
