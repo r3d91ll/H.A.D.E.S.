@@ -1,139 +1,224 @@
+<div align="center">
+
 # Welcome to HADES - Heuristic Adaptive Data Extraction System
 
-## An ArnagoDB server with Model Context Protocol built in
+## An ArangoDB server with Model Context Protocol built in
 
-The **HADES MCP Server** integrates:
+</div>
 
-- **ArangoDB** for document storage
-- A **TypeScript-based Model Context Protocol (MCP) server** for seamless ArangoDB integration.
+**HADES (Heuristic Adaptive Data Extraction System)** is a lightweight foundation for a multi-modal RAG (Retrieval-Augmented Generation) solution, designed to be stable and efficient for small office and home lab environments. This project focuses on integrating:
 
-This server handles **search, query execution, and other operations** via custom tools, making it extensible for various workflows, including LLM-based RAG systems.
-
----
-
-## Features
-
-### TypeScript-based MCP Server
-
-Provides database interaction capabilities through ArangoDB, including:
-
-- `arango_query`: Execute AQL queries with optional bind variables.
-- `arango_insert`: Insert documents into collections.
-- `arango_update`: Update existing documents by key.
-- `arango_remove`: Remove documents from collections.
-- `arango_backup`: Backup collections to JSON files.
-- `arango_list_collections`: List all collections in the database.
-- `arango_create_collection`: Create a new collection.
+- **ArangoDB**: For document storage and vector similarity search using FAISS.
+- **Model Context Protocol (MCP) Server**: Provides seamless interaction with ArangoDB via TypeScript.
 
 ---
 
-## Sample Docker Setup (ArangoDB)
+## Objective
 
-```yaml
-version: "3.8"
-services:
-  arangodb:
-    image: arangodb:3.10
-    container_name: arangodb
-    ports:
-      - "8529:8529"
-    environment:
-      - ARANGO_ROOT_PASSWORD=p@$$W0rd
-```
+This project aims to provide:
 
-1. Save the above as `docker-compose.yml`.
-2. Run `docker-compose up -d`.
-3. Access ArangoDB at `http://localhost:8529` (user: `root`, pass: `p@$$W0rd`).
+- A stable, production-ready backend for RAG systems in small-scale environments.
+- A flexible base for future development of multi-modal solutions.
+- Integration of a locally installed or Dockerized ArangoDB instance with an MCP server.
 
 ---
 
-## Configuration for TypeScript MCP Server
+## 1. Installing ArangoDB
 
-Update the server configuration for tools like Claude or Cline:
+### Option A: Local Installation (Recommended for Stability)
 
-```json
-{
-  "mcpServers": {
-    "arango": {
-      "command": "node",
-      "args": ["/path/to/arango-server/build/index.js"],
-      "env": {
-        "ARANGO_URL": "http://localhost:8529",
-        "ARANGO_DATABASE": "my_database",
-        "ARANGO_USERNAME": "root",
-        "ARANGO_PASSWORD": "p@$$W0rd"
-      }
-    }
-  }
-}
-```
+1. **Add the ArangoDB Repository**:
+
+   ```bash
+   wget -q https://download.arangodb.com/arangodb42/DEBIAN/Release.key -O- | sudo apt-key add -
+   echo 'deb https://download.arangodb.com/arangodb42/DEBIAN/ /' | sudo tee /etc/apt/sources.list.d/arangodb.list
+   ```
+
+2. **Install ArangoDB**:
+
+   ```bash
+   sudo apt-get update
+   sudo apt-get install -y arangodb3
+   ```
+
+3. **Configure ArangoDB**:
+   - During installation, set a secure root password.
+   - Ensure port `8529` is open and accessible.
+4. **Start the ArangoDB Service**:
+
+   ```bash
+   sudo systemctl start arangodb3
+   sudo systemctl enable arangodb3
+   ```
+
+5. **Verify Installation**:
+   Navigate to `http://localhost:8529` and log in with the root credentials.
+
+### Option B: Docker Installation
+
+For containerized environments:
+
+1. Create a `docker-compose.yml` file:
+
+   ```yaml
+   version: "3.8"
+   services:
+     arangodb:
+       image: arangodb:3.10
+       container_name: arangodb
+       ports:
+         - "8529:8529"
+       environment:
+         - ARANGO_ROOT_PASSWORD=p@$$W0rd
+   ```
+
+2. Start the container:
+
+   ```bash
+   docker-compose up -d
+   ```
+
+3. Access ArangoDB at `http://localhost:8529`.
+
+---
+
+## 2. Installing the ArangoDB MCP Server
+
+This project includes a merged version of the [ArangoDB MCP Server](https://github.com/ravenwits/mcp-server-arangodb). Follow these steps to set it up:
+
+1. **Clone the Repository**:
+
+   ```bash
+   git clone https://github.com/r3d91ll/H.A.D.E.S.git
+   cd H.A.D.E.S
+   ```
+
+2. **Configure Environment Variables**:
+
+   ```bash
+   # Copy the example environment file
+   cp env.example .env
+   
+   # Edit the .env file with your preferred settings
+   nano .env
+   ```
+
+3. **Run the Setup Script**:
+
+   ```bash
+   # Make the setup script executable
+   chmod +x setup.sh
+   
+   # Run the setup script
+   ./setup.sh
+   ```
+
+   The setup script will:
+   - Check for required dependencies (Docker, Docker Compose, npm)
+   - Create a .env file if it doesn't exist
+   - Build and start the ArangoDB container
+   - Install npm dependencies
+   - Build the TypeScript project
+
+4. **Run the Server**:
+
+   ```bash
+   node build/index.js
+   ```
 
 ### Environment Variables
 
-- `ARANGO_URL`: ArangoDB server URL (default port is `8529`).
-- `ARANGO_DATABASE`: Database name.
-- `ARANGO_USERNAME`: Database user.
-- `ARANGO_PASSWORD`: Database password.
+The following environment variables can be configured in your `.env` file:
+
+- `ARANGO_URL`: ArangoDB server URL (default: `http://localhost:8529`)
+- `ARANGO_DATABASE`: Database name (default: `hades`)
+- `ARANGO_USERNAME`: Database user (default: `root`)
+- `ARANGO_PASSWORD`: Database password
+- `ARANGO_CONTAINER_NAME`: Docker container name (optional)
+- `ARANGO_PORT`: ArangoDB port (optional, default: `8529`)
+
+> **Security Note**: Never commit your `.env` file to version control. The repository includes an `env.example` file as a template.
 
 ---
 
-## Cline Integration
+## 3. Integration with RAG Solutions
 
-The MCP server can be integrated with the **Cline VSCode Extension** to simplify debugging and interaction:
+- Use the MCP server for AQL queries, vector searches, and database operations.
+- Example queries and JSON payloads for operations like `insert`, `update`, and `remove` are included in the documentation.
 
-1. **Install the MCP server into Cline**:
+---
 
-   ```bash
-   cline add ./build/index.js
-   ```
+## 4. Debugging & Troubleshooting
 
-   This command registers the MCP server from the current working directory.
+### TypeScript Module Compatibility
 
-2. **Verify Installation**:
-   After adding the server, check Cline’s configuration file:
-   - MacOS: `~/Library/Application Support/Code/User/globalStorage/cline.cline/config.json`
-   - Windows: `%APPDATA%/Code/User/globalStorage/cline.cline/config.json`
+If you encounter TypeScript build errors related to ES modules (errors mentioning `CommonJS module` and `ECMAScript module`), this is due to module system compatibility. To resolve this:
 
-   Ensure the configuration includes:
+1. Ensure your `package.json` includes the `"type": "module"` field:
 
    ```json
    {
-     "command": "node",
-     "args": ["./build/index.js"],
-     "env": {
-       "ARANGO_URL": "http://localhost:8529",
-       "ARANGO_DATABASE": "my_database",
-       "ARANGO_USERNAME": "root",
-       "ARANGO_PASSWORD": "p@$$W0rd"
+     "name": "arango-server",
+     "version": "0.4.0",
+     "type": "module",
+     ...
+   }
+   ```
+
+2. Update build scripts in `package.json` to use ES module syntax:
+
+   ```json
+   {
+     "scripts": {
+       "build": "tsc && node --eval \"import('fs').then(fs => fs.chmodSync('build/index.js', '755'))\"",
+       "watch": "tsc --watch && node --eval \"import('fs').then(fs => fs.chmodSync('build/index.js', '755'))\""
      }
    }
    ```
 
-3. **Usage in Cline**:
-   - Open Cline in VSCode.
-   - Issue commands like "List all collections in the database" or "Insert a document into users collection."
-   - The MCP server will handle these operations seamlessly.
+3. Verify your `tsconfig.json` has the correct module settings:
 
----
+   ```json
+   {
+     "compilerOptions": {
+       "module": "Node16",
+       "moduleResolution": "Node16",
+       ...
+     }
+   }
+   ```
 
-## Debugging
+These settings ensure proper compatibility with ES modules used by the Model Context Protocol SDK.
 
-For stdio-based MCP communication:
+### MCP Communication
 
-- Use [MCP Inspector](https://github.com/modelcontextprotocol/inspector):
+- **Debugging MCP Communication**:
+  Use the [MCP Inspector](https://github.com/modelcontextprotocol/inspector) for stdio-based debugging:
 
   ```bash
   npm run inspector
+  ```
+
+- **Logs**:
+  - MCP server logs output to `stdout` by default.
+  - Configure the `logging` module to redirect logs to a file for easier analysis.
+
+- **Docker Logs**:
+
+  ```bash
+  docker logs arangodb
   ```
 
 ---
 
 ## Acknowledgments
 
-We extend our gratitude to the team behind the original [ArangoDB MCP Server](https://github.com/ravenwits/mcp-server-arangodb). Their work has been invaluable in providing the foundation for integrating MCP functionality with ArangoDB. This project builds upon their efforts to deliver enhanced RAG capabilities.
+We extend our gratitude to the team behind the original [ArangoDB MCP Server](https://github.com/ravenwits/mcp-server-arangodb). Their work has provided a robust foundation for this project, enabling seamless integration with ArangoDB.
+
+---
 
 ## License & Support
 
-This project is licensed under the MIT License. For issues, please consult your internal support or the repository maintainers.
+This project is licensed under the MIT License. For support, consult your internal maintainers or the repository maintainers.
 
 *Enjoy building your RAG workflows with the HADES MCP Server!*
