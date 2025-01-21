@@ -32,3 +32,4 @@ backup/
 .DS_Store
 .ModelEngine_venv/
 cline_docs/
+pids/
