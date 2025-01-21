@@ -144,11 +144,11 @@ export function createToolDefinitions(): Tool[] {
 }
 
 export enum API_TOOLS {
-	QUERY = 'arango_query',
-	INSERT = 'arango_insert',
-	UPDATE = 'arango_update',
-	REMOVE = 'arango_remove',
-	BACKUP = 'arango_backup',
-	COLLECTIONS = 'arango_list_collections',
-	CREATE_COLLECTION = 'arango_create_collection',
+    QUERY = 'arango_query',
+    INSERT = 'arango_insert',
+    UPDATE = 'arango_update',
+    REMOVE = 'arango_remove',
+    BACKUP = 'arango_backup',
+    COLLECTIONS = 'arango_list_collections',
+    CREATE_COLLECTION = 'arango_create_collection'
 }

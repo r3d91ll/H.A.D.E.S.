@@ -1,0 +1,146 @@
+[
+  {
+    "model_name": "NovaSky-AI/Sky-T1-32B-Preview",
+    "status": "ready",
+    "message": "Found in cache",
+    "error": null
+  },
+  {
+    "model_name": "Qwen/Qwen2.5-Coder-32B-Instruct",
+    "status": "ready",
+    "message": "Found in cache",
+    "error": null
+  },
+  {
+    "model_name": "Sg-at-srijan-us-kg/Qwen2.5-Coder-32B-Instruct-128k-yarn",
+    "status": "ready",
+    "message": "Found in cache",
+    "error": null
+  },
+  {
+    "model_name": "deepseek-ai/DeepSeek-Coder-V2-Instruct",
+    "status": "ready",
+    "message": "Found in cache",
+    "error": null
+  },
+  {
+    "model_name": "meta-llama/Llama-3.2-11B-Vision-Instruct",
+    "status": "ready",
+    "message": null,
+    "error": null
+  },
+  {
+    "model_name": "xingyaoww/Qwen2.5-Coder-32B-Instruct-AWQ-128k",
+    "status": "ready",
+    "message": "Found in cache",
+    "error": null
+  },
+  {
+    "model_name": "mergekit-community/Qwen2.5-14B-Coder-Merge",
+    "status": "ready",
+    "message": "Found in cache",
+    "error": null
+  },
+  {
+    "model_name": "sentence-transformers/all-MiniLM-L6-v2",
+    "status": "ready",
+    "message": "Found in cache",
+    "error": null
+  },
+  {
+    "model_name": "PowerInfer/SmallThinker-3B-Preview",
+    "status": "ready",
+    "message": "Found in cache",
+    "error": null
+  },
+  {
+    "model_name": "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B",
+    "status": "ready",
+    "message": "Found in cache",
+    "error": null
+  },
+  {
+    "model_name": "ewre324/ewre324-Thinker-Qwen2.5-0.5B-Instruct-Reasoning",
+    "status": "ready",
+    "message": "Found in cache",
+    "error": null
+  },
+  {
+    "model_name": "meta-llama/Llama-3.2-3B-Instruct",
+    "status": "ready",
+    "message": "Found in cache",
+    "error": null
+  },
+  {
+    "model_name": "Qwen/QwQ-32B-Preview",
+    "status": "ready",
+    "message": "Found in cache",
+    "error": null
+  },
+  {
+    "model_name": "Sg-at-srijan-us-kg/Qwen-2.5-Coder-16B-idk-merged-slerp",
+    "status": "ready",
+    "message": "Found in cache",
+    "error": null
+  },
+  {
+    "model_name": "JNolet/Qwen2.5-Coder-14B_v11.25.24.0_CodeInstruct",
+    "status": "ready",
+    "message": "Found in cache",
+    "error": null
+  },
+  {
+    "model_name": "facebook/opt-125m",
+    "status": "ready",
+    "message": "Found in cache",
+    "error": null
+  },
+  {
+    "model_name": "deepseek-ai/DeepSeek-Coder-V2-Lite-Instruct",
+    "status": "ready",
+    "message": "Found in cache",
+    "error": null
+  },
+  {
+    "model_name": "prithivMLmods/Llama-Thinker-3B-Preview",
+    "status": "ready",
+    "message": "Found in cache",
+    "error": null
+  },
+  {
+    "model_name": "ewre324/ewre324-Thinker-Llama-3.2-3B-Instruct-Reasoning",
+    "status": "ready",
+    "message": "Found in cache",
+    "error": null
+  },
+  {
+    "model_name": "mistralai/Codestral-22B-v0.1",
+    "status": "ready",
+    "message": "Found in cache",
+    "error": null
+  },
+  {
+    "model_name": "OpenFinAL/FINGPT_QA_FACEBOOK_OPT",
+    "status": "ready",
+    "message": "Found in cache",
+    "error": null
+  },
+  {
+    "model_name": "casperhansen/llama-3.3-70b-instruct-awq",
+    "status": "ready",
+    "message": "Found in cache",
+    "error": null
+  },
+  {
+    "model_name": "mergekit-community/Qwen2.5-32B-Instruct-Coder-Merge-Tool-use",
+    "status": "ready",
+    "message": "Found in cache",
+    "error": null
+  },
+  {
+    "model_name": "Plaban81/Moe-4x7b-math-reason-code",
+    "status": "ready",
+    "message": "Found in cache",
+    "error": null
+  }
+]

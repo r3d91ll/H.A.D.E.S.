@@ -6,6 +6,7 @@ __pycache__/
 # Virtual environment
 venv/
 env/
+.venv/
 
 # Docker volumes
 milvus_data/
@@ -27,8 +28,7 @@ neo4j_data/
 node_modules/
 build/
 backup/
-*.log
 .env*
 .DS_Store
-
+.ModelEngine_venv/
 cline_docs/
